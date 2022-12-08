@@ -13,14 +13,17 @@ class Board:
         self.stacks = [
             Stack(46, 223+83, [Card(0, 0, 3), Card(0, 0, 1), Card(0, 0, 1)]),
             Stack(174, 223+83, [Card(0, 0, 1), Card(0, 0, 5), Card(0, 0, 5)]),
-            Stack(128*1+174, 233+83, [Card(0, 0, 3), Card(0, 0, 3), Card(0, 0, 3)]),
-            Stack(128*2+174, 233+83, []),
-            Stack(128*3+174, 233+83, []),
-            Stack(128*4+174, 233+83, []),
-            Stack(128*6+174, 233+83, []),
-            Stack(128*5+174, 233+83, [])
+            Stack(128*1+174, 223+83, [Card(0, 0, 3), Card(0, 0, 3), Card(0, 0, 3)]),
+            Stack(128*2+174, 223+83, []),
+            Stack(128*3+174, 223+83, []),
+            Stack(128*4+174, 223+83, []),
+            Stack(128*6+174, 223+83, []),
+            Stack(128*5+174, 223+83, []),
+            Stack(302, 109, [], False, True),
+            Stack(430, 109, [], False, True),
+            Stack(430+128, 109, [], False, True),
+            Stack(430+128+128, 109, [], False, True)
         ]
-        self.stacks[len(self.stacks)-1].locked = True
 
     @property
     def board_rect(self):
@@ -32,15 +35,14 @@ class Board:
         screen.blit(self.board_top, (0, self.y))
         screen.blit(self.board_main, (0, self.y+202))
         for stack in self.stacks:
-            stack.repos_cards()
+            stack.draw(screen)
         cards = sorted([a for b in self.stacks for a in b], key=lambda _: _.grabbed*3000+_.y)
         for card in cards:
-            if not card.grabbed:
-                if card.x > 300:
-                    card.y -= 10
             card.draw(screen)
 
     def handle_event(self, event: pygame.event.Event):
+        def complete_set(cs_: list[Card], m=0): return len(cs_) == 4-m and list(set(map(lambda card23: card23.number, cs_))).__len__() == 1
+
         if not self.board_rect.collidepoint(mp()):
             return
 
@@ -71,10 +73,28 @@ class Board:
 
                             # check if card can go ontop of other stack
                             overlapping_stacks = [check for check in self.stacks
-                                                  if check.top_rect.collidepoint(mp()) or check.top_rect.collidepoint(card.rect.center)]
+                                                  if check.top_rect.collidepoint(mp())]
                             if len(overlapping_stacks):
                                 check = overlapping_stacks[0]
+
+                                # stack has no cards or stack top has similar number
                                 if (not len(check.cards)) or check.cards[len(check.cards)-1].number == card.number:
+
+                                    # top row handling
+                                    selected = [card for card in stack if card.grabbed]
+                                    if check.show_free:  # is top row
+                                        if len(check.cards):  # cards already exist there
+                                            for select in selected:
+                                                select.grabbed = False
+                                            continue
+                                        if len(selected):  # multiple cards dropped
+                                            if not complete_set(selected, m=1):  # it wasn't a set of 4
+                                                for select in selected:
+                                                    select.grabbed = False
+                                                continue
+
                                     stack.remove_cards([card])
+                                    stack.remove_cards(selected)
                                     check.add_cards([card])
+                                    check.add_cards(selected)
 

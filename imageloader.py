@@ -5,6 +5,8 @@ from utils import *
 
 class ImageLoader:
     card_images = []
+    free_stack_image = None
+    used_stack_image = None
 
     @staticmethod
     def init():
@@ -20,3 +22,5 @@ class ImageLoader:
             load_image("9.png"),
             load_image("10.png")
         ]
+        ImageLoader.free_stack_image = load_image("free-slot.png")
+        ImageLoader.used_stack_image = load_image("full-stack.png")

@@ -2,19 +2,15 @@ import pygame
 from constants import *
 from utils import *
 from card import Card
+from imageloader import ImageLoader
 
 
 class Stack:
-    def __init__(self, x: int, y: int, cards: list[Card]):
+    def __init__(self, x: int, y: int, cards: list[Card], lock=False, sf=False):
         self.cards = cards
-        self.free_image = None
-        self.complete_image = None
-        self.locked = False
+        self.locked = lock
+        self.show_free = sf
         self.x, self.y = x, y
-
-    def init_images(self):
-        if not self.free_image:
-            self.free_image = load_image("free-slot.png")
 
     @property
     def complete(self):
@@ -37,11 +33,14 @@ class Stack:
     def top_rect(self) -> pygame.Rect:
         return pygame.Rect(self.x, self.y, 90, 148 + 30 * len(self.cards))
 
-    def repos_cards(self):
+    def draw(self, screen: pygame.Surface):
         for index, card in enumerate(self.cards):
             if not card.grabbed:
                 card.pos = self.x, self.y
                 card.y += index*30
+        if self.show_free:
+            if not self.locked:
+                screen.blit(ImageLoader.free_stack_image, (self.x-4, self.y-4))
 
     def __iter__(self):
         return iter(self.cards)

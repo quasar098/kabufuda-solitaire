@@ -34,13 +34,16 @@ class Stack:
         return pygame.Rect(self.x, self.y, 90, 148 + 30 * len(self.cards))
 
     def draw(self, screen: pygame.Surface):
-        for index, card in enumerate(self.cards):
+        ymod = self.complete*-1000
+        for index2, card in enumerate(self.cards):
             if not card.grabbed:
-                card.pos = self.x, self.y
-                card.y += index*30
+                card.pos = self.x, self.y+ymod
+                card.y += index2*30
         if self.show_free:
             if not self.locked:
                 screen.blit(ImageLoader.free_stack_image, (self.x-4, self.y-4))
+        if self.complete:
+            screen.blit(ImageLoader.full_stack_image, (self.x-2, self.y-2))
 
     def __iter__(self):
         return iter(self.cards)

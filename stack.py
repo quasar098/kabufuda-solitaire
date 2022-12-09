@@ -2,7 +2,7 @@ import pygame
 from constants import *
 from utils import *
 from card import Card
-from imageloader import ImageLoader
+from assetloader import AssetLoader
 
 
 class Stack:
@@ -41,9 +41,9 @@ class Stack:
                 card.y += index2*30
         if self.show_free:
             if not self.locked:
-                screen.blit(ImageLoader.free_stack_image, (self.x-4, self.y-4))
+                screen.blit(AssetLoader.free_stack_image, (self.x - 4, self.y - 4))
         if self.complete:
-            screen.blit(ImageLoader.full_stack_image, (self.x-2, self.y-2))
+            screen.blit(AssetLoader.full_stack_image, (self.x - 2, self.y - 2))
 
     def __iter__(self):
         return iter(self.cards)

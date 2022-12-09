@@ -1,7 +1,7 @@
 import pygame
 from utils import *
 from constants import *
-from imageloader import ImageLoader
+from assetloader import AssetLoader
 
 
 class Card:
@@ -13,7 +13,7 @@ class Card:
 
     @property
     def image(self) -> pygame.Surface:
-        return ImageLoader.card_images[self.number-1]
+        return AssetLoader.card_images[self.number - 1]
 
     @property
     def pos(self) -> tuple[float, float]:

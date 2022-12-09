@@ -15,9 +15,9 @@ class Board:
         self.board_main = load_image("backboard-main.png")
         self.top_stacks = [
             Stack(302, 109, [], False, True),
-            Stack(430, 109, [], True, True),
-            Stack(430+128, 109, [], True, True),
-            Stack(430+128+128, 109, [], True, True)
+            Stack(430, 109, [], False, True),
+            Stack(430+128, 109, [], False, True),
+            Stack(430+128+128, 109, [], False, True)
         ]
         self.bottom_stacks = [
             Stack(46, 223+83, []),
@@ -41,11 +41,11 @@ class Board:
         new_cards = []
         groups = list(range(1, 11))
         for n in groups:
-            for _ in range(5):
+            for _ in range(4):
                 new_cards.append(Card(0, 0, n))
         shuffle(new_cards)
         for stack in self.bottom_stacks:
-            for _ in range(4):
+            for _ in range(5):
                 if not len(new_cards):
                     continue
                 stack.cards.append(new_cards[0])

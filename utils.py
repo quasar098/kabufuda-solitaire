@@ -8,8 +8,12 @@ def load_image(img_name: str):
 
 
 def load_sound(sound_name: str):
-    return pygame.mixer.Sound
+    return pygame.mixer.Sound(join(getcwd(), "sounds", sound_name))
 
 
 def mp():
     return pygame.mouse.get_pos()
+
+
+def clamp(n, a, b):
+    return max(min(n, b), a)

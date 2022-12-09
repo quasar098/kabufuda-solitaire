@@ -4,6 +4,7 @@ from utils import *
 from stack import Stack
 from card import Card
 from random import shuffle
+from assetloader import AssetLoader
 
 
 class Board:
@@ -51,12 +52,6 @@ class Board:
                 stack.cards.append(new_cards[0])
                 new_cards = new_cards[1:]
 
-    @property
-    def board_rect(self):
-        r = self.board_top.get_rect()
-        r.height += self.board_main.get_height()
-        return r
-
     def unlock_stack(self):
         for top in self.top_stacks:
             if top.locked:
@@ -75,9 +70,6 @@ class Board:
     def handle_event(self, event: pygame.event.Event):
         def complete_set(cs_: list[Card], m=0): return len(cs_) == 4-m and list(set(map(lambda card23: card23.number, cs_))).__len__() == 1
 
-        if not self.board_rect.collidepoint(mp()):
-            return
-
         for stack in self.stacks:
             revstack = list(stack.__reversed__())
             for index, card in enumerate(revstack):
@@ -95,6 +87,7 @@ class Board:
                                 also.grab()
 
                             card.grab()
+                            AssetLoader.play_sound(AssetLoader.pickup_sound, 0.6)
                             return
 
                 # let go of card
@@ -133,6 +126,8 @@ class Board:
                                     stack.remove_cards(selected)
                                     check.add_cards([card])
                                     check.add_cards(selected)
+                                    AssetLoader.play_sound(AssetLoader.place_sound, 0.6)
+
                                     for select in selected:
                                         select.grabbed = False
 

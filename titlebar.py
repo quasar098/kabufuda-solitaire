@@ -7,7 +7,7 @@ class Titlebar:
     def __init__(self):
         self.image = load_image("controls.png")
         self.minimize_hovered = load_image("minimize-hovered.png")
-        self.minimize_location = (1012, 10)
+        self.minimize_location = (1012-(1044-1012)+2, 10)
         self.close_hovered = load_image("close-hovered.png")
         self.close_location = (1044, 12)
 

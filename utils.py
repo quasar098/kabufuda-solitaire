@@ -15,5 +15,9 @@ def mp():
     return pygame.mouse.get_pos()
 
 
+def lerp_pos(p1, p2, n):
+    return p1[0]*(1-n)+p2[0]*n, p1[1]*(1-n)+p2[1]*n
+
+
 def clamp(n, a, b):
     return max(min(n, b), a)

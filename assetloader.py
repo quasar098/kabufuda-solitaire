@@ -11,6 +11,7 @@ class AssetLoader:
     pickup_sound = None
     place_sound = None
     select_sound = None
+    deal_sound = None
     music = None
 
     @staticmethod
@@ -30,6 +31,7 @@ class AssetLoader:
         AssetLoader.place_sound = load_sound("place.ogg")
         AssetLoader.select_sound = load_sound("select.ogg")
         AssetLoader.music = load_sound("music.ogg")
+        AssetLoader.deal_sound = load_sound("deal.ogg")
         AssetLoader.play_sound(AssetLoader.music, loop=True)
         AssetLoader.card_images = [
             load_image("1.png"),

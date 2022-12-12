@@ -5,6 +5,7 @@ from stack import Stack
 from card import Card
 from random import shuffle
 from assetloader import AssetLoader
+from difficulty import Difficulty
 
 
 class Board:
@@ -16,9 +17,9 @@ class Board:
         self.board_main = load_image("backboard-main.png")
         self.top_stacks = [
             Stack(302, 109, [], False, True),
-            Stack(430, 109, [], False, True),
-            Stack(430+128, 109, [], False, True),
-            Stack(430+128+128, 109, [], False, True)
+            Stack(430, 109, [], True, True),
+            Stack(430+128, 109, [], True, True),
+            Stack(430+128+128, 109, [], True, True)
         ]
         self.bottom_stacks = [
             Stack(46, 223+83, []),
@@ -36,14 +37,24 @@ class Board:
         self.randomize_game()
         Board.instance = self
 
+    def set_difficulty(self, difficulty: Difficulty):
+        # noinspection PyTypeChecker
+        for i in range(difficulty.value):
+            self.top_stacks[i].locked = False
+
     def randomize_game(self):
+        self.set_difficulty(Difficulty.EXPERT)
         for stack in self.stacks:
             stack.cards = []
         new_cards = []
         groups = list(range(1, 11))
+        anims = [_*0.3 for _ in list(range(40))]
+        shuffle(anims)
         for n in groups:
             for _ in range(4):
-                new_cards.append(Card(0, 0, n))
+                i = anims[0]
+                new_cards.append(Card(0, 0, n, -i))
+                anims.pop(0)
         shuffle(new_cards)
         for stack in self.bottom_stacks:
             for _ in range(5):
@@ -69,6 +80,10 @@ class Board:
 
     def handle_event(self, event: pygame.event.Event):
         def complete_set(cs_: list[Card], m=0): return len(cs_) == 4-m and list(set(map(lambda card23: card23.number, cs_))).__len__() == 1
+
+        animing_rn = any([any([card.anim != 1 for card in stack]) for stack in self.stacks])
+        if animing_rn:
+            return
 
         for stack in self.stacks:
             revstack = list(stack.__reversed__())

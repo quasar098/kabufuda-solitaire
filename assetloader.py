@@ -10,6 +10,7 @@ class AssetLoader:
     full_stack_image = None
     pickup_sound = None
     place_sound = None
+    select_sound = None
     music = None
 
     @staticmethod
@@ -27,6 +28,7 @@ class AssetLoader:
             AssetLoader.sound_channels.append(pygame.mixer.Channel(_+1))
         AssetLoader.pickup_sound = load_sound("pickup.ogg")
         AssetLoader.place_sound = load_sound("place.ogg")
+        AssetLoader.select_sound = load_sound("select.ogg")
         AssetLoader.music = load_sound("music.ogg")
         AssetLoader.play_sound(AssetLoader.music, loop=True)
         AssetLoader.card_images = [

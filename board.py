@@ -34,7 +34,7 @@ class Board:
         self.stacks.extend(self.top_stacks)
         self.stacks.extend(self.bottom_stacks)
         self.randomize_game()
-        self.instance = self
+        Board.instance = self
 
     def randomize_game(self):
         for stack in self.stacks:

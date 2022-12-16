@@ -5,10 +5,12 @@ from constants import *
 from utils import *
 from game import Game
 
+# build help for adding assets: https://python.plainenglish.io/packaging-data-files-to-pyinstaller-binaries-6ed63aa20538
+
 pygame.init()
 screen = pygame.display.set_mode([WIDTH, HEIGHT], pygame.NOFRAME)
 
-loading_image = pygame.image.load(join(getcwd(), "images", "loading.png")).convert_alpha()
+loading_image = pygame.image.load(join(dirname(__file__), "assets", "loading.png")).convert_alpha()
 screen.blit(loading_image, loading_image.get_rect(center=screen.get_rect().center))
 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_WAIT)
 

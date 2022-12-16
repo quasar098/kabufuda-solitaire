@@ -3,6 +3,7 @@ from constants import *
 from utils import *
 from assetloader import AssetLoader
 from board import Board
+from sys import exit
 from diffselect import DifficultySelector
 
 
@@ -51,9 +52,10 @@ class Titlebar:
                     pygame.display.iconify()
                 if mute_rect.collidepoint(mp()):
                     AssetLoader.muted = not AssetLoader.muted
+                    AssetLoader.play_sound(AssetLoader.select_sound)
                 if refresh_rect.collidepoint(mp()):
                     DifficultySelector.instance.shown = True
                     AssetLoader.play_sound(AssetLoader.select_sound)
                 if close_rect.collidepoint(mp()):
                     pygame.quit()
-                    quit()
+                    exit()

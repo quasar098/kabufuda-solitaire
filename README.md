@@ -34,5 +34,25 @@ this depends on difficulty
 - normal starts with 3 free slots
 - easy starts with all 4 free slots
 
-you can unlock free slots by making complete stacks by themselves 
+you can unlock free slots by making complete stacks (4 of the same) by themselves 
 in the bottom 8 slots (not the top 4)
+
+### build instructions:
+
+1) Install the necessary python packages with `pip install -r requirements.txt`
+2) Check that it runs from source by running the main.py file
+3) Install PyInstaller module
+4) Navigate in cmd or bash to the root directory of this project
+5) Run `PyInstaller main.py --clean --onefile --noconsole --add-data "./assets;assets"`
+**NOTE:** you need to replace the ; with : on unix systems
+   
+
+#### build command explained:
+
+The `--clean` part of the build command helps the executable be not flagged as a virus by Windows Defender
+
+The `--onefile` makes it all one file instead of a dll nightmare
+
+The `--noconsole` starts the pygame window without a console alongside it
+
+The `--add-data` part takes the assets folder and bundles it with the executable

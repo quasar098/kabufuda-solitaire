@@ -17,6 +17,7 @@ class AssetLoader:
     darken = None
 
     muted = False
+    running = False
 
     @staticmethod
     def play_sound(sound: pygame.mixer.Sound, volume=0.3, loop=False):

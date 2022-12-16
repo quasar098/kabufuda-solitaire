@@ -1,14 +1,13 @@
 import pygame
-from os import getcwd
-from os.path import join
+from os.path import join, dirname
 
 
 def load_image(img_name: str):
-    return pygame.image.load(join(getcwd(), "assets", img_name)).convert_alpha()
+    return pygame.image.load(join(dirname(__file__), "assets", img_name)).convert_alpha()
 
 
 def load_sound(sound_name: str):
-    return pygame.mixer.Sound(join(getcwd(), "assets", sound_name))
+    return pygame.mixer.Sound(join(dirname(__file__), "assets", sound_name))
 
 
 def mp():

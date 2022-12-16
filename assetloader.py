@@ -16,12 +16,14 @@ class AssetLoader:
     music = None
     darken = None
 
+    muted = False
+
     @staticmethod
     def play_sound(sound: pygame.mixer.Sound, volume=0.3, loop=False):
         for channel in AssetLoader.sound_channels:
             if channel.get_busy():
                 continue
-            channel.set_volume(volume)
+            sound.set_volume(volume)
             channel.play(sound, loops=-loop)
             break
 

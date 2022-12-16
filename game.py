@@ -16,6 +16,11 @@ class Game:
         AssetLoader.init()
 
     def draw(self, screen: pygame.Surface):
+        if AssetLoader.muted:
+            AssetLoader.sound_channels[0].set_volume(0)
+        else:
+            AssetLoader.sound_channels[0].set_volume(1)
+
         self.board.draw(screen)
         if self.diffselect.shown:
             screen.blit(AssetLoader.darken, (0, 0))

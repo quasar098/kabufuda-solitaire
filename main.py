@@ -32,6 +32,7 @@ while True:
                     init_clicked_on_title = True
         if event.type == pygame.MOUSEBUTTONUP:
             init_clicked_on_title = False
+        # noinspection PyBroadException
         try:
             if event.type == pygame.MOUSEMOTION:
                 if event.buttons[0]:

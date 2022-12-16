@@ -32,16 +32,19 @@ while True:
                     init_clicked_on_title = True
         if event.type == pygame.MOUSEBUTTONUP:
             init_clicked_on_title = False
-        if event.type == pygame.MOUSEMOTION:
-            if event.buttons[0]:
-                if init_clicked_on_title:
-                    rel = [mp()[0]-last_mp[0], mp()[1]-last_mp[1]]
-                    rel[0] = clamp(rel[0], -40, 40)
-                    rel[1] = clamp(rel[1], -40, 40)
-                    pgwindow = Window.from_display_module()
-                    # noinspection PyUnresolvedReferences
-                    pgwindow.position = pgwindow.position[0]+rel[0], pgwindow.position[1]+rel[1]
-                    last_rel_effect = rel
+        try:
+            if event.type == pygame.MOUSEMOTION:
+                if event.buttons[0]:
+                    if init_clicked_on_title:
+                        rel = [mp()[0]-last_mp[0], mp()[1]-last_mp[1]]
+                        rel[0] = clamp(rel[0], -40, 40)
+                        rel[1] = clamp(rel[1], -40, 40)
+                        pgwindow = Window.from_display_module()
+                        # noinspection PyUnresolvedReferences
+                        pgwindow.position = pgwindow.position[0]+rel[0], pgwindow.position[1]+rel[1]
+                        last_rel_effect = rel
+        except Exception:
+            print("dragging the window is unavailable on this device. please report to the github")
         game.handle_event(event)
 
     # code here

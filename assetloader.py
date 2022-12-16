@@ -12,7 +12,9 @@ class AssetLoader:
     place_sound = None
     select_sound = None
     deal_sound = None
+    win_sound = None
     music = None
+    darken = None
 
     @staticmethod
     def play_sound(sound: pygame.mixer.Sound, volume=0.3, loop=False):
@@ -25,6 +27,9 @@ class AssetLoader:
 
     @staticmethod
     def init():
+        AssetLoader.darken = pygame.Surface((1072, 1000), pygame.SRCALPHA)
+        AssetLoader.darken.fill((0, 0, 0, 100))
+        AssetLoader.win_sound = load_sound("win.ogg")
         for _ in range(5):
             AssetLoader.sound_channels.append(pygame.mixer.Channel(_+1))
         AssetLoader.pickup_sound = load_sound("pickup.ogg")

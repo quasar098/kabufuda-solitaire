@@ -3,6 +3,7 @@ from constants import *
 from utils import *
 from assetloader import AssetLoader
 from board import Board
+from diffselect import DifficultySelector
 
 
 class Titlebar:
@@ -36,7 +37,7 @@ class Titlebar:
                 if minimize_rect.collidepoint(mp()):
                     pygame.display.iconify()
                 if refresh_rect.collidepoint(mp()):
-                    Board.randomize_game(Board.instance)
+                    DifficultySelector.instance.shown = True
                     AssetLoader.play_sound(AssetLoader.select_sound)
                 if close_rect.collidepoint(mp()):
                     pygame.quit()

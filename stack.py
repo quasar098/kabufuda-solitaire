@@ -31,7 +31,7 @@ class Stack:
 
     @property
     def top_rect(self) -> pygame.Rect:
-        return pygame.Rect(self.x, self.y, 90, 148 + 30 * len(self.cards))
+        return pygame.Rect(self.x, self.y + 30 * max(len(self.cards)-1, 0), 90, 148)
 
     def draw(self, screen: pygame.Surface):
         ymod = self.complete*-1000
@@ -43,7 +43,7 @@ class Stack:
             if not self.locked:
                 screen.blit(AssetLoader.free_stack_image, (self.x - 4, self.y - 4))
         if self.complete:
-            screen.blit(AssetLoader.full_stack_image, (self.x - 2, self.y - 2))
+            screen.blit(AssetLoader.full_stack_image, (self.x - 4, self.y - 4))
 
     def __iter__(self):
         return iter(self.cards)

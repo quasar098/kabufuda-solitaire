@@ -12,7 +12,6 @@ class Card:
         self.anim = anim
         self.grabbed = False
         self.number = number
-        self.sounded = False
         self._gp = (0, 0)
 
     @property
@@ -32,16 +31,13 @@ class Card:
         return self.image.get_rect(topleft=self.pos)
 
     def draw(self, screen: pygame.Surface):
-        self.anim += 2.3/FRAMERATE
-        if self.anim > 0 and not self.sounded:
-            AssetLoader.play_sound(AssetLoader.deal_sound)
-            self.sounded = True
+        self.anim += 4/FRAMERATE
         if self.anim > 1:
             self.anim = 1
         s_ = self.rect.inflate(4, 4)[:2]
         oawihef = lerp_pos(Card.ORIGIN, s_[:2], self.anim)
         mand = pygame.Rect(*oawihef, 94, 152)
-        pygame.draw.rect(screen, (0, 0, 0), mand)
+        pygame.draw.rect(screen, (0, 0, 0), mand.inflate(2, 2))
         screen.blit(self.image, self.image.get_rect(center=mand.center))
         if self.grabbed:
             self.pos = mp()[0]-self._gp[0], mp()[1]-self._gp[1]

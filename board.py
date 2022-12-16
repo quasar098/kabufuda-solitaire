@@ -16,7 +16,7 @@ class Board:
         self.board_top = load_image("backboard-top.png")
         self.board_main = load_image("backboard-main.png")
         self.top_stacks = [
-            Stack(302, 109, [], False, True),
+            Stack(302, 109, [], True, True),
             Stack(430, 109, [], True, True),
             Stack(430+128, 109, [], True, True),
             Stack(430+128+128, 109, [], True, True)
@@ -32,23 +32,24 @@ class Board:
             Stack(128*5+174, 223+83, [])
         ]
         self.stacks = []
-        self.stacks.extend(self.top_stacks)
         self.stacks.extend(self.bottom_stacks)
-        self.randomize_game()
+        self.stacks.extend(self.top_stacks)
         Board.instance = self
 
     def set_difficulty(self, difficulty: Difficulty):
         # noinspection PyTypeChecker
+        for t in self.top_stacks:
+            t.locked = True
         for i in range(difficulty.value):
             self.top_stacks[i].locked = False
 
     def randomize_game(self):
-        self.set_difficulty(Difficulty.EXPERT)
         for stack in self.stacks:
             stack.cards = []
         new_cards = []
+        AssetLoader.play_sound(sound=AssetLoader.deal_sound, volume=1)
         groups = list(range(1, 11))
-        anims = [_*0.3 for _ in list(range(40))]
+        anims = [_*0.426 for _ in list(range(40))]
         shuffle(anims)
         for n in groups:
             for _ in range(4):

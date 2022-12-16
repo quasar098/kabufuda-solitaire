@@ -4,11 +4,11 @@ from os.path import join
 
 
 def load_image(img_name: str):
-    return pygame.image.load(join(getcwd(), "images", img_name)).convert_alpha()
+    return pygame.image.load(join(getcwd(), "assets", img_name)).convert_alpha()
 
 
 def load_sound(sound_name: str):
-    return pygame.mixer.Sound(join(getcwd(), "sounds", sound_name))
+    return pygame.mixer.Sound(join(getcwd(), "assets", sound_name))
 
 
 def mp():

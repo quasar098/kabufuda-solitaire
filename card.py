@@ -26,6 +26,12 @@ class Card:
     def pos(self, value) -> None:
         self.x, self.y = value
 
+    def hash(self):
+        return sha256(f"<{self.number}>".encode("utf-8")).hexdigest()
+
+    def copy(self):
+        return Card(self.x, self.y, self.number, self.anim)
+
     @property
     def rect(self) -> pygame.Rect:
         return self.image.get_rect(topleft=self.pos)

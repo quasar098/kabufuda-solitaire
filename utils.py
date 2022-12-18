@@ -1,5 +1,6 @@
 import pygame
 from os.path import join, dirname
+from hashlib import sha256
 
 
 def load_image(img_name: str):

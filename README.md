@@ -1,6 +1,6 @@
 # kabafuda solitaire
 
-![demo.png](demo.png)
+![demo.png](assets/demo.png)
 
 (from last call bbs)
 

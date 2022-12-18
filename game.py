@@ -8,10 +8,13 @@ from diffselect import DifficultySelector
 
 
 class Game:
+    board = None
+
     def __init__(self):
         self.win_anim = 0
         self.titlebar = Titlebar()
-        self.board = Board()
+        if Game.board is None:
+            Game.board = Board()
         self.diffselect = DifficultySelector()
         AssetLoader.init()
 
@@ -21,7 +24,7 @@ class Game:
         else:
             AssetLoader.sound_channels[0].set_volume(1)
 
-        self.board.draw(screen)
+        Game.board.draw(screen)
         if self.diffselect.shown:
             screen.blit(AssetLoader.darken, (0, 0))
         self.titlebar.draw(screen)
@@ -29,7 +32,7 @@ class Game:
 
     def handle_event(self, event: pygame.event.Event):
         self.titlebar.handle_event(event)
-        if self.has_won():
+        if Game.has_won():
             if self.win_anim == 0:
                 AssetLoader.play_sound(AssetLoader.win_sound, 0.6)
             self.win_anim += 1/FRAMERATE
@@ -43,11 +46,12 @@ class Game:
             handle = self.diffselect.handle_event(event)
             if handle is not None:
                 self.diffselect.shown = False
-                self.board.set_difficulty(handle)
-                self.board.randomize_game()
+                Game.board.set_difficulty(handle)
+                Game.board.randomize_game()
             return
-        self.board.handle_event(event)
+        Game.board.handle_event(event)
 
-    def has_won(self):
-        return all([stack.complete for stack in self.board.stacks if len(stack.cards)]) \
-               and any([len(stack.cards) for stack in self.board.stacks])
+    @staticmethod
+    def has_won():
+        return all([stack.complete for stack in Game.board.stacks if len(stack.cards)]) \
+               and any([len(stack.cards) for stack in Game.board.stacks])

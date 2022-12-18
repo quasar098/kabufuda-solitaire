@@ -16,6 +16,9 @@ class Stack:
     def complete(self):
         return len(self.cards) == 4 and list(set(map(lambda card: card.number, self.cards))).__len__() == 1
 
+    def hash(self):
+        return sha256("".join([card.hash() for card in self.cards]).encode("utf-8")).hexdigest()
+
     @property
     def pos(self):
         return self.x, self.y
@@ -28,6 +31,11 @@ class Stack:
 
     def __reversed__(self):
         return self.cards.__reversed__()
+
+    def copy(self):
+        s = Stack(self.x, self.y, [], lock=self.locked, sf=self.show_free)
+        s.cards = [c.copy() for c in self.cards]
+        return s
 
     @property
     def top_rect(self) -> pygame.Rect:

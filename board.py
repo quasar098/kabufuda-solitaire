@@ -9,13 +9,20 @@ from difficulty import Difficulty
 
 
 class Board:
-    instance = None
+    instance: "Board" = None
+    board_top = None
+    board_main = None
+
+    def __repr__(self):
+        return f"<Board(stacks={self.stacks})>"
 
     def __init__(self):
         self.y = 83
-        self.board_top = load_image("backboard-top.png")
-        self.board_main = load_image("backboard-main.png")
-        self.top_stacks = [
+        if Board.board_top is None:
+            Board.board_top = load_image("backboard-top.png")
+        if Board.board_main is None:
+            Board.board_main = load_image("backboard-main.png")
+        self.top_stacks: list[Stack] = [
             Stack(302, 109, [], True, True),
             Stack(430, 109, [], True, True),
             Stack(430+128, 109, [], True, True),
@@ -28,8 +35,8 @@ class Board:
             Stack(128*2+174, 223+83, []),
             Stack(128*3+174, 223+83, []),
             Stack(128*4+174, 223+83, []),
-            Stack(128*6+174, 223+83, []),
-            Stack(128*5+174, 223+83, [])
+            Stack(128*5+174, 223+83, []),
+            Stack(128*6+174, 223+83, [])
         ]
         self.stacks = []
         self.stacks.extend(self.bottom_stacks)
@@ -42,6 +49,15 @@ class Board:
             t.locked = True
         for i in range(difficulty.value):
             self.top_stacks[i].locked = False
+
+    def copy(self):
+        b = Board()
+        b.top_stacks = [ts.copy() for ts in self.top_stacks]
+        b.bottom_stacks = [bs.copy() for bs in self.bottom_stacks]
+        b.stacks = []
+        b.stacks.extend(b.bottom_stacks)
+        b.stacks.extend(b.top_stacks)
+        return b
 
     def randomize_game(self):
         for stack in self.stacks:
@@ -64,6 +80,9 @@ class Board:
                 stack.cards.append(new_cards[0])
                 new_cards = new_cards[1:]
 
+    def hash(self) -> str:
+        return sha256("".join([stack.hash() for stack in self.stacks]).encode("utf-8")).hexdigest()
+
     def unlock_stack(self):
         for top in self.top_stacks:
             if top.locked:
@@ -71,13 +90,14 @@ class Board:
                 return
 
     def draw(self, screen: pygame.Surface):
-        screen.blit(self.board_top, (0, self.y))
-        screen.blit(self.board_main, (0, self.y+202))
+        screen.blit(Board.board_top, (0, self.y))
+        screen.blit(Board.board_main, (0, self.y+202))
         for stack in self.stacks:
             stack.draw(screen)
         cards = sorted([a for b in self.stacks for a in b], key=lambda _: _.grabbed*3000+_.y)
         for card in cards:
             card.draw(screen)
+        Board.instance = self
 
     def handle_event(self, event: pygame.event.Event):
         def complete_set(cs_: list[Card], m=0): return len(cs_) == 4-m and list(set(map(lambda card23: card23.number, cs_))).__len__() == 1

@@ -30,7 +30,7 @@ class Card:
         return sha256(f"<{self.number}>".encode("utf-8")).hexdigest()
 
     def copy(self):
-        return Card(self.x, self.y, self.number, self.anim)
+        return Card(self.x, self.y, self.number, 1)
 
     @property
     def rect(self) -> pygame.Rect:

@@ -5,6 +5,7 @@ from constants import *
 from utils import *
 from game import Game
 from solver import solve
+from _thread import start_new_thread
 
 # build help for adding assets: https://python.plainenglish.io/packaging-data-files-to-pyinstaller-binaries-6ed63aa20538
 
@@ -30,7 +31,7 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 running = False
             if event.key == pygame.K_SPACE:
-                solve()
+                start_new_thread(solve, ())
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 if mp()[1] < 83 and mp()[0] < 940:

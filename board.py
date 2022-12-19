@@ -13,11 +13,24 @@ class Board:
     board_top = None
     board_main = None
 
+    def quality(self):
+        if self.cached_quality is None:
+            q = self.depth
+            q -= 2 * sum([not ((not len(stack.cards)) or stack.complete) for stack in self.top_stacks])
+            q += 3 * sum([((not len(stack.cards)) or stack.complete) for stack in self.stacks])
+            q += 3 * sum([stack.complete for stack in self.top_stacks])
+            q += 7 * sum([stack.complete for stack in self.bottom_stacks])
+            self.cached_quality = q
+        return self.cached_quality
+
     def __repr__(self):
         return f"<Board(stacks={self.stacks})>"
 
     def __init__(self):
         self.y = 83
+        self.derived = None
+        self.cached_quality = None
+        self.depth = 0
         if Board.board_top is None:
             Board.board_top = load_image("backboard-top.png")
         if Board.board_main is None:

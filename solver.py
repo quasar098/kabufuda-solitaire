@@ -108,13 +108,11 @@ def available_moves(board: Board, moves_list: list[str] = None):
 def solve():
     hashed_so_far = []
     stack: list[Board] = [Game.board.copy()]
-    times = 0
     final: Optional[Board] = None
-
+    print("finding solution")
+    times = 0
     while len(stack):
         times += 1
-        if times % 10 == 0:
-            print(f"cycles taken: {times}")
         stack.sort(key=lambda b: b.quality())
         try_board: Board = stack.pop()
         if len([s for s in try_board.stacks if s.complete]) == 10:
@@ -126,6 +124,7 @@ def solve():
                 hashed_so_far.append(new_move.hash())
                 stack.append(new_move)
 
+    print(f"cycles taken: {times}")
     print("visualizing soon")
     sleep(1)
     course = []

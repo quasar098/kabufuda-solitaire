@@ -5,11 +5,10 @@ from assetloader import AssetLoader
 
 
 class Card:
-    ORIGIN = (430+64, -148)
-
     def __init__(self, x: int, y: int, number: int, anim: float = 0):
         self.x, self.y = x, y
         self.anim = anim
+        self.origin = (430+64, -148)
         self.grabbed = False
         self.number = number
         self._gp = (0, 0)
@@ -41,7 +40,7 @@ class Card:
         if self.anim > 1:
             self.anim = 1
         s_ = self.rect.inflate(4, 4)[:2]
-        oawihef = lerp_pos(Card.ORIGIN, s_[:2], self.anim)
+        oawihef = lerp_pos(self.origin, s_[:2], self.anim)
         mand = pygame.Rect(*oawihef, 94, 152)
         pygame.draw.rect(screen, (0, 0, 0), mand.inflate(2, 2))
         screen.blit(self.image, self.image.get_rect(center=mand.center))

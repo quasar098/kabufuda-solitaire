@@ -29,9 +29,6 @@ class Game:
             screen.blit(AssetLoader.darken, (0, 0))
         self.titlebar.draw(screen)
         self.diffselect.draw(screen)
-
-    def handle_event(self, event: pygame.event.Event):
-        self.titlebar.handle_event(event)
         if Game.has_won():
             if self.win_anim == 0:
                 AssetLoader.play_sound(AssetLoader.win_sound, 0.6)
@@ -42,6 +39,9 @@ class Game:
             return
         if 1.6 > self.win_anim > 1.3:
             self.diffselect.shown = True
+
+    def handle_event(self, event: pygame.event.Event):
+        self.titlebar.handle_event(event)
         if self.diffselect.shown:
             handle = self.diffselect.handle_event(event)
             if handle is not None:

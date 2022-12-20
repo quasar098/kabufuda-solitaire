@@ -109,7 +109,6 @@ def solve():
     hashed_so_far = []
     stack: list[Board] = [Game.board.copy()]
     times = 0
-    course = []
     final: Optional[Board] = None
 
     while len(stack):
@@ -118,7 +117,6 @@ def solve():
             print(f"cycles taken: {times}")
         stack.sort(key=lambda b: b.quality())
         try_board: Board = stack.pop()
-        course.append(try_board)
         if len([s for s in try_board.stacks if s.complete]) == 10:
             print("done")
             final = try_board
@@ -130,13 +128,15 @@ def solve():
 
     print("visualizing soon")
     sleep(1)
+    course = []
     der = final
     while der is not None:
         course.insert(0, der)
         der = der.derived
-    for c in course:
+    for i, c in enumerate(course):
         Game.board = c
         sleep(0.1)
+    Game.board.derived = None
 
 
 if __name__ == '__main__':

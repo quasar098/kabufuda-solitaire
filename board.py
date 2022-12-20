@@ -19,7 +19,15 @@ class Board:
             q -= 2 * sum([not ((not len(stack.cards)) or stack.complete) for stack in self.top_stacks])
             q += 3 * sum([((not len(stack.cards)) or stack.complete) for stack in self.stacks])
             q += 3 * sum([stack.complete for stack in self.top_stacks])
-            q += 7 * sum([stack.complete for stack in self.bottom_stacks])
+            q += 15 * sum([stack.complete for stack in self.bottom_stacks])
+            uniq = 0
+            for stack in self.stacks:
+                lastn = -1
+                for card in stack.cards:
+                    if lastn != card.number:
+                        lastn = card.number
+                        uniq += 1
+            q -= uniq
             self.cached_quality = q
         return self.cached_quality
 
@@ -57,9 +65,9 @@ class Board:
         Board.instance = self
 
     def set_difficulty(self, difficulty: Difficulty):
-        # noinspection PyTypeChecker
         for t in self.top_stacks:
             t.locked = True
+        # noinspection PyTypeChecker
         for i in range(difficulty.value):
             self.top_stacks[i].locked = False
 
@@ -70,6 +78,7 @@ class Board:
         b.stacks = []
         b.stacks.extend(b.bottom_stacks)
         b.stacks.extend(b.top_stacks)
+        b.derived = self.derived
         return b
 
     def randomize_game(self):

@@ -9,6 +9,7 @@ from diffselect import DifficultySelector
 
 class Game:
     board = None
+    solution = None
 
     def __init__(self):
         self.win_anim = 0
@@ -32,6 +33,7 @@ class Game:
         if Game.has_won():
             if self.win_anim == 0:
                 AssetLoader.play_sound(AssetLoader.win_sound, 0.6)
+                Game.solution = None
             self.win_anim += 1/FRAMERATE
         else:
             self.win_anim = 0

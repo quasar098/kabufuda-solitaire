@@ -31,8 +31,11 @@ def available_moves(board: Board, moves_list: list[str] = None):
             if bnew.stacks[x1].complete:
                 continue
             ncomplete = len([_ for _ in bnew.stacks if _.complete])
+            ogin = bnew.stacks[x1].cards[-1].origin
             bnew.stacks[x2].cards.append(bnew.stacks[x1].cards[-1])
             bnew.stacks[x1].cards.pop()
+            bnew.stacks[x2].cards[-1].origin = ogin
+            bnew.stacks[x2].cards[-1].anim = 0
             newcomplete = len([_ for _ in bnew.stacks if _.complete])
             if newcomplete > ncomplete:
                 try_open = [os for os in bnew.stacks if os.locked]
@@ -116,7 +119,7 @@ def solve():
         stack.sort(key=lambda b: b.quality())
         try_board: Board = stack.pop()
         if len([s for s in try_board.stacks if s.complete]) == 10:
-            print("done")
+            print("finishing recursion")
             final = try_board
             break
         for new_move in available_moves(try_board):
@@ -125,18 +128,25 @@ def solve():
                 stack.append(new_move)
 
     print(f"cycles taken: {times}")
-    print("visualizing soon")
     sleep(1)
     course = []
     der = final
     while der is not None:
         course.insert(0, der)
-        der = der.derived
-    for i, c in enumerate(course):
-        Game.board = c
-        sleep(0.1)
-    Game.board.derived = None
+        qwas = der.derived
+        der.derived = None
+        der = qwas
+    Game.solution = course.copy()
+    print("done solving")
+
+
+def next_step():
+    if Game.solution is None or not len(Game.solution):
+        solve()
+    Game.board = Game.solution[0]
+    Game.solution.pop(0)
 
 
 if __name__ == '__main__':
-    solve()
+    print("no")
+

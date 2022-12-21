@@ -153,7 +153,6 @@ def solve():
                 hashed_so_far.append(new_move.hash())
                 stack.append(new_move)
 
-    print(f"cycles taken: {times}")
     course = []
     der = final
     while der is not None:
@@ -161,16 +160,23 @@ def solve():
         qwas = der.derived
         der.derived = None
         der = qwas
-    print(f"moves: {len(course)}")
     Game.solution = course.copy()
-    print("done solving")
+    m = f"Moves: {len(course)-1}\nPositions checked: {times}\nPress spacebar for next move"
+    if len(course) == 0:
+        m = "There is no solution"
+    # noinspection PyBroadException
+    try:
+        # noinspection PyPackageRequirements
+        import win32gui
+        win32gui.MessageBox(None, m, "Auto-solver", 0)
+    except Exception:
+        pass
 
 
 def next_step():
     if Game.solution is None or not len(Game.solution):
         solve()
     if len(Game.solution) == 0:
-        print("there is no solution?")
         return
     Game.board = Game.solution[0]
     Game.solution.pop(0)

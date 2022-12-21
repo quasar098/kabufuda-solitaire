@@ -31,11 +31,9 @@ def available_moves(board: Board, moves_list: list[str] = None):
             if bnew.stacks[x1].complete:
                 continue
             ncomplete = len([_ for _ in bnew.stacks if _.complete])
-            ogin = bnew.stacks[x1].cards[-1].origin
+            ogin = bnew.stacks[x1].cards[-1].pos
             bnew.stacks[x2].cards.append(bnew.stacks[x1].cards[-1])
             bnew.stacks[x1].cards.pop()
-            bnew.stacks[x2].cards[-1].origin = ogin
-            bnew.stacks[x2].cards[-1].anim = 0
             newcomplete = len([_ for _ in bnew.stacks if _.complete])
             if newcomplete > ncomplete:
                 try_open = [os for os in bnew.stacks if os.locked]
@@ -58,7 +56,7 @@ def available_moves(board: Board, moves_list: list[str] = None):
 
     # top stack to bottom stack movement
     for x1, tstack in enumerate(otop):
-        if not len(tstack.cards):
+        if len(tstack.cards) != 1:
             continue
         start_tcard = tstack.cards[-1]
         for x2, nstack in enumerate(obottom):
@@ -83,7 +81,7 @@ def available_moves(board: Board, moves_list: list[str] = None):
     def complete_set(cs_: list[Card], m=0):
         return len(cs_) == 4 - m and list(set(map(lambda card23: card23.number, cs_))).__len__() == 1
     for inb, bs in enumerate(board.bottom_stacks):
-        if len(bs.cards) < 4:
+        if len(bs.cards) <= 4:
             continue
         if not complete_set(bs.cards[-4:]):
             continue
@@ -102,6 +100,31 @@ def available_moves(board: Board, moves_list: list[str] = None):
             moves.append(bnew)
             break
 
+    # bottom stack to bottom stack full movement
+    for inb, bs in enumerate(board.bottom_stacks):
+        if len(bs.cards) <= 4:
+            continue
+        if not complete_set(bs.cards[-4:]):
+            continue
+        for ind, ts in enumerate(board.bottom_stacks):
+            if len(ts.cards):
+                continue
+            bnew = board.copy()
+            ncomplete = len([_ for _ in bnew.stacks if _.complete])
+            bnew.bottom_stacks[ind].cards.extend(bs.cards[-4:])
+            bnew.bottom_stacks[inb].cards.pop()
+            bnew.bottom_stacks[inb].cards.pop()
+            bnew.bottom_stacks[inb].cards.pop()
+            bnew.bottom_stacks[inb].cards.pop()
+            newcomplete = len([_ for _ in bnew.stacks if _.complete])
+            if newcomplete > ncomplete:
+                try_open = [os for os in bnew.stacks if os.locked]
+                if len(try_open):
+                    try_open[0].locked = False
+            moves_list.append(f"move all {inb+1}b to {ind+1}b")
+            moves.append(bnew)
+            break
+
     for move in moves:
         move.depth += 1
         move.derived = board.copy()
@@ -111,6 +134,9 @@ def available_moves(board: Board, moves_list: list[str] = None):
 def solve():
     hashed_so_far = []
     stack: list[Board] = [Game.board.copy()]
+    for s_ in stack[0].stacks:
+        for c_ in s_.cards:
+            c_.anim = 1
     final: Optional[Board] = None
     print("finding solution")
     times = 0
@@ -128,7 +154,6 @@ def solve():
                 stack.append(new_move)
 
     print(f"cycles taken: {times}")
-    sleep(1)
     course = []
     der = final
     while der is not None:
@@ -136,6 +161,7 @@ def solve():
         qwas = der.derived
         der.derived = None
         der = qwas
+    print(f"moves: {len(course)}")
     Game.solution = course.copy()
     print("done solving")
 
@@ -143,10 +169,12 @@ def solve():
 def next_step():
     if Game.solution is None or not len(Game.solution):
         solve()
+    if len(Game.solution) == 0:
+        print("there is no solution?")
+        return
     Game.board = Game.solution[0]
     Game.solution.pop(0)
 
 
 if __name__ == '__main__':
     print("no")
-

@@ -5,10 +5,10 @@ from assetloader import AssetLoader
 
 
 class Card:
-    def __init__(self, x: int, y: int, number: int, anim: float = 0):
+    def __init__(self, x: int, y: int, number: int, anim: float = 0, ogin=(430+64, -148)):
         self.x, self.y = x, y
         self.anim = anim
-        self.origin = (430+64, -148)
+        self.origin = ogin
         self.grabbed = False
         self.number = number
         self._gp = (0, 0)
@@ -29,7 +29,7 @@ class Card:
         return sha256(f"<{self.number}>".encode("utf-8")).hexdigest()
 
     def copy(self):
-        return Card(self.x, self.y, self.number, 1)
+        return Card(self.x, self.y, self.number, self.anim, self.origin)
 
     @property
     def rect(self) -> pygame.Rect:
